@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интерактивная инструкция по настройке прокси</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .image-container img {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .image-container img:hover {
+            transform: scale(1.01);
+        }
+    </style>
+    <script>
+        function getDirectDriveUrl(url) {
+            if (!url) return '';
+            const regExp = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+            const matches = url.match(regExp);
+            if (matches && matches[1]) {
+                return "https://lh3.googleusercontent.com/d/" + matches[1];
+            }
+            return url;
+        }
+
+        function handleImageError(img) {
+            const filename = img.getAttribute('data-filename');
+            let currentIndex = parseInt(img.getAttribute('data-path-index') || '0', 10);
+            const paths = [
+                "./" + filename,
+                "../" + filename,
+                "../../" + filename,
+                "public/" + filename,
+                "../public/" + filename
+            ];
+
+            if (currentIndex < paths.length) {
+                img.setAttribute('data-path-index', currentIndex + 1);
+                img.src = paths[currentIndex];
+            } else {
+                img.onerror = null;
+                img.style.display = 'none';
+                const container = img.parentNode;
+                const mockupDiv = container.querySelector('.mockup-fallback');
+                if (mockupDiv) {
+                    mockupDiv.classList.remove('hidden');
+                }
+            }
+        }
+
+        function loadSavedUrls() {
+            const keys = [
+                'image_fa2fe5.png',
+                'image_f9d629.png',
+                'проксси как купить 1.jpg',
+                'image_f9bb82.png',
+                'image_efd9dd.png',
+                'image_f9d262.png',
+                'image_f9d18d.png',
+                'image_f9cb03.png',
+                'image_efc69b.png'
+            ];
+            
+            const defaultUrls = {
+                'image_efc69b.png': 'https://drive.google.com/file/d/1EB5a2tTzjrXqfDgpmtYn3pEt8slA1gc1/view?usp=drive_link',
+                'проксси как купить 1.jpg': 'https://drive.google.com/file/d/1EB5a2tTzjrXqfDgpmtYn3pEt8slA1gc1/view?usp=drive_link',
+                'image_fa2fe5.png': 'https://drive.google.com/file/d/1mv1HsRkt2OR_EGmIHQJtTNbpiBzjA0-f/view?usp=drive_link',
+                'image_f9d629.png': 'https://drive.google.com/file/d/1jo-MK1u7LPHPQ5xUcs7GVjJ9nayedVNY/view?usp=drive_link',
+                'image_f9bb82.png': 'https://drive.google.com/file/d/19gmh11UzaBk94zd43daucfIW1LbdT_zn/view?usp=drive_link',
+                'image_efd9dd.png': 'https://drive.google.com/file/d/11ALwdValRivJ-i_FK0wmWJGC14lvrFiE/view?usp=drive_link',
+                'image_f9d262.png': 'https://drive.google.com/file/d/1tM92jooKrWlMQOGsQXywvDXLa-UvpCAu/view?usp=drive_link',
+                'image_f9d18d.png': 'https://drive.google.com/file/d/1ciMdSvR6CJIDT7w4sW_A0osRThCONQWd/view?usp=drive_link',
+                'image_f9cb03.png': 'https://drive.google.com/file/d/1Uf5xsG-o8OT3A9El2fBEyiRBI7Hr4bjl/view?usp=drive_link'
+            };
+
+            keys.forEach(key => {
+                const savedUrl = localStorage.getItem('proxy_img_' + key) || defaultUrls[key];
+                if (savedUrl) {
+                    const img = document.querySelector('img[data-filename="' + key + '"]');
+                    if (img) {
+                        img.src = getDirectDriveUrl(savedUrl);
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedUrls();
+        });
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">SpaceProxy</h1>
+                <p class="text-blue-100 text-sm mt-1">Интерактивная пошаговая инструкция для новичков</p>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+                <a href="https://spaceproxy.net?ref=132141" target="_blank" class="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-50 transition text-sm">
+                    Купить прокси 🚀
+                </a>
+                <button onclick="copyPromo()" class="bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg border border-blue-500 hover:bg-blue-800 transition text-sm flex items-center gap-2">
+                    <span>Промокод: <strong class="underline">RoRL5qeJYi9WwsCBgtN</strong></span>
+                    <span>📋</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <aside class="lg:col-span-1">
+                <nav class="sticky top-6 space-y-2" id="sidebar-nav">
+                    <button onclick="switchTab('buy')" id="btn-buy" class="tab-btn w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 bg-blue-100 text-blue-700 shadow-sm">
+                        <span>🛍️</span>
+                        <span>1. Покупка прокси</span>
+                    </button>
+                    <button onclick="switchTab('data')" id="btn-data" class="tab-btn w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 text-slate-600 hover:bg-slate-100">
+                        <span>🔑</span>
+                        <span>2. Получение данных</span>
+                    </button>
+                    <button onclick="switchTab('tg')" id="btn-tg" class="tab-btn w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 text-slate-600 hover:bg-slate-100">
+                        <span>📱</span>
+                        <span>3. Настройка Telegram</span>
+                    </button>
+                    <button onclick="switchTab('pc')" id="btn-pc" class="tab-btn w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 text-slate-600 hover:bg-slate-100">
+                        <span>💻</span>
+                        <span>4. Настройка на ПК</span>
+                    </button>
+                    <button onclick="switchTab('support')" id="btn-support" class="tab-btn w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 text-slate-600 hover:bg-slate-100">
+                        <span>🛠️</span>
+                        <span>5. Гарантия & Помощь</span>
+                    </button>
+                </nav>
+            </aside>
+
+            <main class="lg:col-span-3">
+                
+                <section id="tab-buy" class="tab-content space-y-8">
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl">
+                        <p class="text-sm text-amber-950 font-semibold flex items-center gap-1.5">
+                            <span>🔔</span> <span>Полезное примечание:</span>
+                        </p>
+                        <p class="text-sm text-amber-900 mt-1">
+                            Последовательность шагов настройки не имеет критического значения. Вы можете сначала выбрать параметры прокси и примерить покупку, а затем внести средства на баланс, либо сделать всё по порядку.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Шаг 1 из 3</span>
+                        <h2 class="text-2xl font-bold mt-3 mb-4">Переход по ссылке и регистрация</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            Первым делом перейдите по ссылке <a href="https://spaceproxy.net?ref=132141" target="_blank" class="text-blue-600 hover:underline font-semibold">SpaceProxy</a> и пройдите простую регистрацию. Сразу после этого вы автоматически попадете в свой личный кабинет.
+                        </p>
+                        <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-6 relative min-h-[250px] flex items-center justify-center">
+                            <img src="image_efc69b.png" data-filename="image_efc69b.png" data-path-index="0" onerror="handleImageError(this)" alt="Регистрация на сайте SpaceProxy" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                            
+                            <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-4">
+                                    <span class="text-slate-400">👤 Регистрация нового пользователя</span>
+                                </div>
+                                <div class="space-y-4 max-w-sm mx-auto my-4 font-sans text-sm">
+                                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-3">
+                                        <div class="font-bold text-center text-white text-base">Создание аккаунта</div>
+                                        <div>
+                                            <label class="text-slate-400 text-xs">Ваш Email:</label>
+                                            <input class="bg-slate-950 border border-slate-700 text-white text-xs p-2 rounded w-full mt-1" value="example@mail.ru" readonly>
+                                        </div>
+                                        <button class="bg-blue-600 text-white w-full py-2 rounded font-bold">Зарегистрироваться</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+                            <p class="text-sm text-blue-900 font-medium">💡 Что делать на этом шаге:</p>
+                            <p class="text-sm text-blue-800 mt-1">
+                                Нажмите кнопку регистрации, введите ваш адрес электронной почты и подтвердите его при необходимости. Сразу после этого вы будете перенаправлены на главный экран панели управления (в личный кабинет).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Шаг 2 из 3</span>
+                        <h2 class="text-2xl font-bold mt-3 mb-4">Пополнение баланса и использование купона</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            Перед покупкой прокси-сервера убедитесь, что на балансе вашего личного кабинета достаточно средств. Обязательно воспользуйтесь скидочным купоном для уменьшения стоимости заказа.
+                        </p>
+                        <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-6 relative min-h-[250px] flex items-center justify-center">
+                            <img src="проксси как купить 1.jpg" data-filename="проксси как купить 1.jpg" data-path-index="0" onerror="handleImageError(this)" alt="Оплата заказа" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                            
+                            <div class="mockup-fallback hidden w-full p-6 bg-slate-950 text-slate-200 rounded-xl font-mono text-xs select-none">
+                                <div class="border-b border-slate-800 pb-2 mb-4 flex justify-between items-center text-slate-500">
+                                    <span>💳 Баланс и Способ оплаты</span>
+                                </div>
+                                <div class="space-y-4 font-sans text-sm">
+                                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                                        <div class="text-xs text-slate-400">Поле купона на скидку:</div>
+                                        <div class="flex gap-2 mt-1.5">
+                                            <div class="bg-slate-800 px-3 py-2 rounded text-xs text-green-400 font-mono border border-red-500 w-full">RoRL5qeJYi9WwsCBgtN</div>
+                                            <button class="bg-red-500 text-white px-4 py-1.5 rounded text-xs font-bold shrink-0">Применить</button>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 text-xs">
+                                        <div class="border-2 border-red-500 bg-emerald-950/20 p-3 rounded-lg text-center">
+                                            <div class="font-bold text-emerald-400">💳 FREEKASSA (СБП)</div>
+                                            <div class="text-[10px] text-slate-400 mt-1">Оплата рублями через СБП</div>
+                                        </div>
+                                        <div class="border border-slate-800 bg-slate-900 p-3 rounded-lg text-center">
+                                            <div class="font-bold text-blue-400">🪙 CRYPTOMUS</div>
+                                            <div class="text-[10px] text-slate-400 mt-1">Оплата в USDT / BTC</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+                            <p class="text-sm text-blue-900 font-medium">💡 Инструкция по пополнению и купону:</p>
+                            <ul class="text-sm text-blue-800 mt-1.5 list-disc list-inside space-y-1">
+                                <li>Скопируйте промокод на скидку: <span class="bg-white px-1.5 py-0.5 rounded font-mono border text-blue-700 font-bold select-all">RoRL5qeJYi9WwsCBgtN</span>.</li>
+                                <li>Перейдите в раздел пополнения счета, вставьте скопированный купон в поле ввода и подтвердите его применение, чтобы пересчитать сумму.</li>
+                                <li>Выберите СБП для оплаты банковскими картами РФ или Cryptomus для криптоплатежей. Оплатите заказ.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Шаг 3 из 3</span>
+                        <h2 class="text-2xl font-bold mt-3 mb-4">Где и как купить прокси</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            После зачисления средств выберите подходящий тип прокси-серверов и задайте основные технические параметры вашего заказа.
+                        </p>
+
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl mb-6">
+                            <p class="text-sm text-amber-950 font-semibold flex items-center gap-1.5">
+                                <span>⚠️</span> <span>Важное предупреждение о выборе типа прокси:</span>
+                            </p>
+                            <p class="text-sm text-amber-900 mt-1 leading-relaxed">
+                                Для работы в браузере (на ПК, с нейросетями) и для использования в Telegram <strong>необходимо приобретать разные типы прокси</strong>. Для браузера и работы на компьютере покупайте стандартные прокси с поддержкой протокола <strong>HTTP</strong>, а для Telegram — специализированные прокси <strong>MTProto</strong>.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-700 mb-2 flex items-center gap-2">
+                                    <span class="bg-slate-200 text-slate-800 text-xs px-2 py-1 rounded-md">3.1</span>
+                                    <span>Выбор категории</span>
+                                </h3>
+                                <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-3 relative min-h-[250px] flex items-center justify-center">
+                                    <img src="image_fa2fe5.png" data-filename="image_fa2fe5.png" data-path-index="0" onerror="handleImageError(this)" alt="Выбор типа прокси" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                                    
+                                    <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                        <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-4">
+                                            <span class="text-slate-400">🌐 panel.spaceproxy.net - Новый заказ</span>
+                                        </div>
+                                        <div class="space-y-4">
+                                            <div class="grid grid-cols-3 gap-2">
+                                                <div class="border-2 border-red-500 bg-blue-900/50 p-4 rounded text-center">
+                                                    <div class="font-bold text-sm">Индивидуальные IPv4</div>
+                                                    <div class="text-[10px] text-slate-300">Рекомендуется для сайтов</div>
+                                                </div>
+                                                <div class="border border-slate-700 p-4 rounded text-center text-slate-400">
+                                                    <div class="font-bold text-sm">Общие IPv4</div>
+                                                </div>
+                                                <div class="border-2 border-red-500 bg-slate-800/50 p-4 rounded text-center">
+                                                    <div class="font-bold text-sm text-white">Telegram Прокси</div>
+                                                    <div class="text-[10px] text-slate-300">MTProto</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-500 italic mb-6">В меню личного кабинета нажмите «Новый заказ» и укажите тип прокси (например, «Индивидуальные IPv4» для универсального доступа).</p>
+                            </div>
+
+                            <div class="border-t border-slate-100 pt-6">
+                                <h3 class="text-lg font-bold text-slate-700 mb-2 flex items-center gap-2">
+                                    <span class="bg-slate-200 text-slate-800 text-xs px-2 py-1 rounded-md">3.2</span>
+                                    <span>Тонкая настройка тарифа</span>
+                                </h3>
+                                <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-3 relative min-h-[250px] flex items-center justify-center">
+                                    <img src="image_f9d629.png" data-filename="image_f9d629.png" data-path-index="0" onerror="handleImageError(this)" alt="Параметры тарифа" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                                    
+                                    <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                        <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-4">
+                                            <span class="text-slate-400">⚙️ Параметры тарифа</span>
+                                        </div>
+                                        <div class="space-y-4">
+                                            <div class="bg-slate-800 p-2 rounded flex justify-between border border-red-500">
+                                                <span>Количество: <strong>1 шт.</strong></span>
+                                            </div>
+                                            <div class="bg-slate-800 p-2 rounded flex justify-between border border-red-500">
+                                                <span>Период: <strong>30 дней</strong></span>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                                                <div class="bg-slate-800 p-2 rounded border-2 border-red-500 text-yellow-400">🇬🇧 Великобритания</div>
+                                                <div class="bg-slate-800 p-2 rounded border-2 border-red-500 text-yellow-400">🇳🇱 Нидерланды</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-500 italic mb-6">Укажите желаемое количество прокси, установите период аренды (например, 30 дней) и выберите нужную геолокацию.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+                            <p class="text-sm text-blue-900 font-medium">💡 Советы по выбору стран:</p>
+                            <p class="text-sm text-blue-800 mt-1">
+                                Наиболее стабильными и быстрыми для обхода большинства ограничений считаются локации Нидерланды, Великобритания, США или ОАЭ. В случае сомнений вы всегда можете проконсультироваться в чате техподдержки.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="tab-data" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><span>🔑</span> Личный кабинет и получение данных</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            После завершения покупки ваши прокси появятся в меню личного кабинета в специальном разделе <strong class="text-blue-600">«Прокси» ➔ «Все заказы»</strong>. Отсюда вы сможете просматривать и выгружать свои данные.
+                        </p>
+                        <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-6 relative min-h-[250px] flex items-center justify-center">
+                            <img src="image_f9bb82.png" data-filename="image_f9bb82.png" data-path-index="0" onerror="handleImageError(this)" alt="Личный кабинет с данными прокси" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                            
+                            <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                <div class="border-b border-slate-700 pb-2 mb-4 text-slate-400">🛡️ Панель управления / Прокси ➔ Все заказы</div>
+                                <div class="space-y-4">
+                                    <div class="flex gap-2">
+                                        <button class="bg-emerald-600 text-white px-3 py-1 rounded text-[10px] font-sans">Скачать HTTP</button>
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded text-[10px] font-sans">Скачать SOCKS5</button>
+                                    </div>
+                                    <div class="bg-slate-950 p-3 rounded border border-slate-800 text-[11px] overflow-x-auto space-y-1">
+                                        <div>🚀 <strong>Данные вашего прокси:</strong></div>
+                                        <div class="text-yellow-400">IP-Адрес: <span class="text-white">154.209.140.136</span></div>
+                                        <div class="text-yellow-400">HTTP Порт: <span class="text-white">64156</span></div>
+                                        <div class="text-yellow-400">SOCKS5 Порт: <span class="text-white">64157</span></div>
+                                        <div class="text-yellow-400">Логин: <span class="text-white">usr_98184</span></div>
+                                        <div class="text-yellow-400">Пароль: <span class="text-white">pass_abc123</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl mb-6">
+                            <p class="text-sm text-blue-900 font-semibold flex items-center gap-1.5">
+                                <span>💡</span> <span>Важно для ПК и Нейросетей (ChatGPT, Claude и др.):</span>
+                            </p>
+                            <p class="text-sm text-blue-800 mt-1 leading-relaxed">
+                                Для подключения прокси на ваш компьютер (системные настройки) или для работы с большинством современных <strong>нейросетей</strong> в 99% случаев требуется именно протокол <strong class="underline">HTTP</strong>. Используйте соответствующий порт и данные.
+                            </p>
+                        </div>
+
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-xl mb-6">
+                            <p class="text-sm text-indigo-900 font-semibold flex items-center gap-1.5">
+                                <span>📱</span> <span>Прокси для Telegram (MTProto):</span>
+                            </p>
+                            <p class="text-sm text-indigo-800 mt-1 leading-relaxed">
+                                Для Telegram используется исключительно протокол <strong class="underline">MTProto</strong>. В личном кабинете вы получите сразу готовую кликабельную ссылку. При нажатии на неё Telegram подключится сам, без необходимости вводить порты и логины вручную.
+                            </p>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-6">
+                            <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <span>📄</span>
+                                <span>Как расшифровать скачанный файл с прокси?</span>
+                            </h3>
+                            <p class="text-slate-600 text-sm mb-4 leading-relaxed">
+                                Если вы экспортируете список прокси в файл через личный кабинет, данные скачиваются в текстовом формате, где все параметры идут в одну компактную строчку через разделительное двоеточие <code class="bg-slate-100 px-1.5 py-0.5 rounded text-red-500 font-bold font-mono">:</code>.
+                            </p>
+                            
+                            <div class="bg-slate-900 text-white rounded-xl p-4 sm:p-6 font-mono text-xs sm:text-sm shadow-inner space-y-4">
+                                <div class="text-slate-400 border-b border-slate-800 pb-2 flex justify-between">
+                                    <span>📝 Строка из файла выглядит так:</span>
+                                    <span class="text-[10px] text-green-400">Формат IP:PORT:USER:PASS</span>
+                                </div>
+                                <div class="text-center py-2 text-base sm:text-lg select-all bg-slate-950 rounded border border-slate-800 tracking-wide">
+                                    <span class="text-blue-400">154.209.140.136</span>:<span class="text-yellow-400">64156</span>:<span class="text-emerald-400">usr_98184</span>:<span class="text-purple-400">pass_abc123</span>
+                                </div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-center text-[10px] sm:text-xs">
+                                    <div class="bg-blue-950/40 border border-blue-800/50 p-2 rounded-lg">
+                                        <span class="block font-bold text-blue-400">IP-Адрес</span>
+                                        <span class="text-slate-400">154.209.140.136</span>
+                                    </div>
+                                    <div class="bg-yellow-950/40 border border-yellow-800/50 p-2 rounded-lg">
+                                        <span class="block font-bold text-yellow-400">Port (Порт)</span>
+                                        <span class="text-slate-400 font-semibold">64156</span>
+                                    </div>
+                                    <div class="bg-emerald-950/40 border border-emerald-800/50 p-2 rounded-lg">
+                                        <span class="block font-bold text-emerald-400">Логин (User)</span>
+                                        <span class="text-slate-400">usr_98184</span>
+                                    </div>
+                                    <div class="bg-purple-950/40 border border-purple-800/50 p-2 rounded-lg">
+                                        <span class="block font-bold text-purple-400">Пароль (Pass)</span>
+                                        <span class="text-slate-400">pass_abc123</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl">
+                                <p class="text-sm text-amber-950 font-medium">⚠️ Как правильно извлечь данные:</p>
+                                <p class="text-sm text-amber-900 mt-1 leading-relaxed">
+                                    Чтобы правильно перенести прокси в настройки, копируйте каждый блок данных по отдельности (IP, порт, логин и пароль), аккуратно пропуская разделительные двоеточия и исключая пробелы до и после значений.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="tab-tg" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><span>📱</span> Настройка прокси в мессенджере Telegram</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            Интегрировать прокси в Telegram можно двумя удобными путями: автоматически по готовой ссылке в 1 клик или вручную через системные разделы параметров приложения на ПК или телефоне. Для мессенджера используется исключительно современный протокол <strong class="text-blue-600">MTProto</strong>.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="border border-blue-100 bg-blue-50/50 p-5 rounded-2xl flex flex-col justify-between shadow-sm">
+                                <div>
+                                    <span class="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">Вариант 1</span>
+                                    <h3 class="text-lg font-bold mt-3 mb-2 text-blue-950">Мгновенно по ссылке</h3>
+                                    <p class="text-xs text-blue-900/80 leading-relaxed">
+                                        Самый быстрый и легкий путь. Кликните по готовой ссылке MTProto в личном кабинете — и мессенджер подключит прокси автоматически без ручного ввода.
+                                    </p>
+                                </div>
+                                <button onclick="document.getElementById('tg-link-method').scrollIntoView({ behavior: 'smooth' })" class="mt-4 text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                                    Подробнее о ссылке ➔
+                                </button>
+                            </div>
+
+                            <div class="border border-slate-200 bg-slate-50/50 p-5 rounded-2xl flex flex-col justify-between shadow-sm">
+                                <div>
+                                    <span class="bg-slate-600 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">Вариант 2</span>
+                                    <h3 class="text-lg font-bold mt-3 mb-2 text-slate-950">Ручная конфигурация</h3>
+                                    <p class="text-xs text-slate-700 leading-relaxed">
+                                        Классический ручной способ. Вы можете настроить собственный индивидуальный прокси MTProto, указав IP, порт и специальный секретный ключ.
+                                    </p>
+                                </div>
+                                <button onclick="document.getElementById('tg-manual-method').scrollIntoView({ behavior: 'smooth' })" class="mt-4 text-xs font-semibold text-slate-600 hover:text-slate-800 flex items-center gap-1">
+                                    Подробнее о ручном вводе ➔
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6 pt-4 border-t border-slate-100">
+                            
+                            <div id="tg-link-method" class="bg-blue-50/40 p-5 rounded-2xl border border-blue-100">
+                                <h3 class="text-lg font-bold text-blue-950 mb-3 flex items-center gap-2">
+                                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold">1</span>
+                                    <span>Вариант 1. Подключение по готовой ссылке в 1 клик</span>
+                                </h3>
+                                <p class="text-slate-700 text-sm mb-4 leading-relaxed">
+                                    Если вы приобрели прокси для Telegram (<strong>MTProto</strong>), в вашем распоряжении готовая автоматическая ссылка. Настройка займет ровно 5 секунд:
+                                </p>
+                                <ol class="text-sm text-slate-800 list-decimal list-inside space-y-2 leading-relaxed">
+                                    <li>Зайдите в личный кабинет SpaceProxy в меню <strong>«Прокси» ➔ «Все заказы»</strong>.</li>
+                                    <li>Найдите купленный прокси и просто нажмите на готовую кликабельную ссылку подключения <strong>MTProto</strong>.</li>
+                                    <li>Ваш браузер выдаст системный запрос и автоматически откроет приложение Telegram.</li>
+                                    <li>В открывшемся окне подтверждения внутри Telegram нажмите кнопку <strong>«Подключить прокси» (Enable Proxy)</strong>. На этом всё!</li>
+                                </ol>
+                            </div>
+
+                            <div id="tg-manual-method" class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                                <h3 class="text-lg font-bold text-slate-950 mb-3 flex items-center gap-2">
+                                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-600 text-white text-xs font-bold">2</span>
+                                    <span>Вариант 2. Ручной ввод данных в настройках мессенджера</span>
+                                </h3>
+                                <p class="text-slate-700 text-sm mb-4 leading-relaxed">
+                                    Если вы хотите настроить прокси MTProto классическим ручным способом, выполните следующие шаги:
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                        <h4 class="font-bold text-sm text-slate-800 mb-2 flex items-center gap-1.5">💻 На компьютере (Telegram Desktop):</h4>
+                                        <ol class="text-xs text-slate-600 list-decimal list-inside space-y-1.5 leading-relaxed">
+                                            <li>Откройте меню и перейдите в <strong>«Настройки»</strong>.</li>
+                                            <li>Выберите вкладку <strong>«Продвинутые настройки»</strong>.</li>
+                                            <li>В самом верху найдите раздел <strong>«Тип соединения»</strong> (или Прокси).</li>
+                                            <li>Нажмите на пункт <strong>«Использовать собственный прокси»</strong>.</li>
+                                        </ol>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200">
+                                        <h4 class="font-bold text-sm text-slate-800 mb-2 flex items-center gap-1.5">📱 На мобильном телефоне (Android):</h4>
+                                        <ol class="text-xs text-slate-600 list-decimal list-inside space-y-1.5 leading-relaxed">
+                                            <li>Откройте боковое меню и выберите <strong>«Настройки»</strong>.</li>
+                                            <li>Перейдите в категорию <strong>«Данные и память»</strong>.</li>
+                                            <li>Прокрутите страницу в самый низ и нажмите <strong>«Настройки прокси»</strong>.</li>
+                                            <li>Активируйте переключатель <strong>«Использовать прокси»</strong>.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="bg-slate-900 text-slate-300 p-4 rounded-xl font-sans text-xs space-y-2">
+                                    <p class="font-bold text-white text-sm">📝 Заполнение полей реквизитов:</p>
+                                    <p class="leading-relaxed">
+                                        Выберите протокол подключения <strong>MTProto</strong> и внесите следующие данные из личного кабинета:
+                                    </p>
+                                    <ul class="list-disc list-inside space-y-1 pl-1 text-slate-300">
+                                        <li><strong>Сервер (Хост/IP):</strong> скопируйте и вставьте ваш IP-адрес</li>
+                                        <li><strong>Порт:</strong> укажите порт</li>
+                                        <li><strong>Ключ шифрования (Secret):</strong> введите уникальный секретный ключ MTProto</li>
+                                    </ul>
+                                    <p class="text-[10px] text-yellow-400 font-semibold pt-1">После завершения ввода нажмите кнопку «Готово» или «Сохранить». Статус подключения изменится на «Подключен».</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Screenshot positioned at the bottom of the card block -->
+                        <div class="mt-8 pt-6 border-t border-slate-100">
+                            <p class="text-slate-500 text-xs mb-3 italic">Иллюстрация настроек MTProto-соединения в приложении Telegram:</p>
+                            <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 relative min-h-[250px] flex items-center justify-center">
+                                <img src="image_efd9dd.png" data-filename="image_efd9dd.png" data-path-index="0" onerror="handleImageError(this)" alt="Настройки прокси в Telegram" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                                
+                                <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                    <div class="border-b border-slate-700 pb-2 mb-4 text-slate-400 flex justify-between">
+                                        <span>⚙️ Подключение прокси MTProto в Telegram</span>
+                                        <span class="text-xs text-green-400">Только MTProto</span>
+                                    </div>
+                                    <div class="space-y-4 font-sans text-xs">
+                                        <div class="bg-slate-950 p-4 rounded-lg space-y-3">
+                                            <div class="text-slate-300 text-center py-1">Выбор способа соединения</div>
+                                            <div class="bg-slate-900 p-3 rounded-lg text-center border border-slate-800 space-y-2">
+                                                <div>🌐 Протокол: <strong class="text-blue-400">MTProto</strong></div>
+                                                <div>Сервер: <strong class="text-white">154.209.140.136</strong></div>
+                                                <div>Порт: <strong class="text-white">64157</strong></div>
+                                                <div>Ключ: <strong class="text-white">dd00112233445566778899aabbccddeeff</strong></div>
+                                            </div>
+                                            <button class="bg-blue-600 hover:bg-blue-700 text-white w-full py-2.5 rounded-lg font-bold border-2 border-red-500 text-sm">ПОДКЛЮЧИТЬ ПРОКСИ (ENABLE)</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section id="tab-pc" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Шаг 1 из 3</span>
+                        <h2 class="text-2xl font-bold mt-3 mb-4">Вход в параметры системы Windows</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            Чтобы пустить трафик всей операционной системы через прокси, сначала откроем стандартную панель управления ПК:
+                        </p>
+                        <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-6 relative min-h-[250px] flex items-center justify-center">
+                            <img src="image_f9d262.png" data-filename="image_f9d262.png" data-path-index="0" onerror="handleImageError(this)" alt="Параметры ПК" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                            
+                            <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                <div class="border-b border-slate-700 pb-2 mb-4 text-slate-400">❖ Пуск Windows / Menu</div>
+                                <div class="space-y-3 font-sans">
+                                    <div class="bg-slate-950 p-4 rounded-lg flex items-center justify-between border-2 border-red-500">
+                                        <div class="flex items-center gap-3">
+                                            <span class="text-2xl">⚙️</span>
+                                            <div>
+                                                <div class="font-bold text-white">Параметры ПК</div>
+                                                <div class="text-[10px] text-slate-400">Системные настройки Windows</div>
+                                            </div>
+                                        </div>
+                                        <span class="bg-red-500 text-white text-[10px] px-2 py-1 rounded font-bold shrink-0">НАЖАТЬ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+                            <p class="text-sm text-blue-900 font-medium">💡 Что делать на этом шаге:</p>
+                            <p class="text-sm text-blue-800 mt-1">Откройте меню <strong>«Пуск»</strong> в нижнем левом углу и выберите вкладку <strong>«Параметры ПК»</strong> (иконка синей шестеренки).</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Шаг 2 из 3</span>
+                        <h2 class="text-2xl font-bold mt-3 mb-4">Поиск настроек прокси-сервера</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            В окне параметров мы быстро найдем нужный нам сетевой раздел через встроенную поисковую строку:
+                        </p>
+                        <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-6 relative min-h-[250px] flex items-center justify-center">
+                            <img src="image_f9d18d.png" data-filename="image_f9d18d.png" data-path-index="0" onerror="handleImageError(this)" alt="Поиск прокси" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                            
+                            <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                <div class="border-b border-slate-700 pb-2 mb-4 text-slate-400">🔍 Параметры поиска Windows</div>
+                                <div class="space-y-4 font-sans text-xs">
+                                    <div class="bg-slate-950 p-4 rounded-lg space-y-3">
+                                        <div>Введите слово в строку поиска:</div>
+                                        <div class="bg-slate-900 px-3 py-2 rounded text-yellow-400 font-mono border-2 border-red-500 flex justify-between items-center">
+                                            <span>прокси ✍️</span>
+                                        </div>
+                                        <div class="border-t border-slate-800 pt-3 space-y-2">
+                                            <div class="bg-blue-900/40 p-2 rounded text-white border border-red-500 flex justify-between">
+                                                <span>⚙️ Параметры прокси-сервера</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+                            <p class="text-sm text-blue-900 font-medium">💡 Что делать на этом шаге:</p>
+                            <p class="text-sm text-blue-800 mt-1">В строке поиска параметров начните писать слово <strong>«прокси»</strong>. В выпадающем меню выберите строчку <strong>«Параметры прокси-сервера»</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Шаг 3 из 3</span>
+                        <h2 class="text-2xl font-bold mt-3 mb-4">Ручной ввод IP и Порта</h2>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            Осталось активировать подключение и указать технические реквизиты купленного сервера:
+                        </p>
+                        <div class="image-container border border-slate-200 rounded-xl overflow-hidden bg-slate-100 mb-6 relative min-h-[250px] flex items-center justify-center">
+                            <img src="image_f9cb03.png" data-filename="image_f9cb03.png" data-path-index="0" onerror="handleImageError(this)" alt="Ввод IP и Порта" class="w-full h-auto max-h-[450px] object-contain mx-auto cursor-zoom-in" onclick="openLightbox(this.src)">
+                            
+                            <div class="mockup-fallback hidden w-full p-6 bg-slate-900 text-white rounded-xl font-mono text-xs select-none">
+                                <div class="border-b border-slate-700 pb-2 mb-4 text-slate-400">🛠️ Настройка прокси вручную</div>
+                                <div class="space-y-4 font-sans text-xs">
+                                    <div class="bg-slate-950 p-4 rounded-lg space-y-3">
+                                        <div class="flex justify-between items-center">
+                                            <span>Использовать прокси-сервер:</span>
+                                            <span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px] font-bold border border-red-500">ВКЛ [✓]</span>
+                                        </div>
+                                        <div class="grid grid-cols-3 gap-2">
+                                            <div class="col-span-2">
+                                                <div>Адрес (IP):</div>
+                                                <input class="bg-slate-900 border border-red-500 text-white text-xs p-2 rounded w-full mt-1" value="154.209.140.136" readonly>
+                                            </div>
+                                            <div>
+                                                <div>Порт:</div>
+                                                <input class="bg-slate-900 border border-red-500 text-white text-xs p-2 rounded w-full mt-1" value="64156" readonly>
+                                            </div>
+                                        </div>
+                                        <button class="bg-blue-600 text-white w-full py-2 rounded font-bold border-2 border-red-500">Сохранить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+                            <p class="text-sm text-blue-900 font-medium">💡 Что делать на этом шаге:</p>
+                            <ol class="text-sm text-blue-800 mt-1 list-decimal list-inside space-y-1">
+                                <li>Найдите блок <strong>«Настройка прокси вручную»</strong> и включите тумблер <strong>«Использовать прокси-сервер»</strong> в состояние <strong>Вкл</strong>.</li>
+                                <li>В поле <strong>«Адрес»</strong> впишите ваш купленный IP-адрес.</li>
+                                <li>В поле <strong>«Порт»</strong> укажите порт.</li>
+                                <li>Нажмите синюю кнопку <strong>«Сохранить»</strong>.</li>
+                            </ol>
+                            <p class="text-sm text-amber-800 font-semibold mt-3">⚡ Важная деталь:</p>
+                            <p class="text-sm text-amber-900 mt-0.5">Когда вы сохраните эти настройки и откроете любой браузер для перехода на сайт, браузер автоматически покажет небольшое окно авторизации с требованием ввести логин и пароль. Просто скопируйте логин и пароль прокси из кабинета, введите их и нажмите кнопку "Запомнить".</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="tab-support" class="tab-content hidden space-y-8">
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-100">
+                        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2"><span>🛡️</span> Гарантия на возврат и замену прокси</h2>
+                        <p class="text-slate-600 mb-4 leading-relaxed text-lg">
+                            Если по какой-то причине купленный прокси не заработал, выдает ошибку сети или заблокирован на нужном вам ресурсе — не переживайте!
+                        </p>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            На сервисе SpaceProxy действует железное правило: <strong>замена неподходящих прокси или полный возврат средств осуществляются в течение 3 дней со дня покупки</strong>.
+                        </p>
+                        
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center gap-6">
+                            <div class="text-5xl text-emerald-600">💬</div>
+                            <div>
+                                <h3 class="text-lg font-bold text-emerald-950">Как максимально быстро решить вопрос?</h3>
+                                <p class="text-emerald-900 text-sm mt-1 leading-relaxed">
+                                    Находясь на сайте SpaceProxy, напишите напрямую в <strong>чат поддержки клиентов</strong> (иконка чата висит в правом нижнем углу страницы). Поддержка работает без выходных, операторы отвечают моментально и сразу же выдадут вам новый рабочий прокси-сервер вместо неработающего.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Новая секция с решением проблем доступа к российским сайтам -->
+                        <div class="border-t border-slate-100 pt-6 mb-8">
+                            <h3 class="text-lg font-bold mb-3 flex items-center gap-2 text-rose-700">
+                                <span>🇷🇺</span>
+                                <span>Не открываются российские сайты? (Госуслуги, банки и др.)</span>
+                            </h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                Если вы настроили зарубежный прокси-сервер (например, Нидерланды, Великобританию, Германию и др.), то при попытке зайти на некоторые российские ресурсы — государственные порталы (Госуслуги, Налог.ру), сайты ведомств или приложения российских банков (Сбербанк, ВТБ) — вы можете столкнуться с ошибкой сети. Эти сервисы блокируют зарубежные IP-адреса в целях защиты от кибератак.
+                            </p>
+                            <p class="text-slate-700 text-sm font-semibold mb-3">Для решения этой проблемы есть 2 простых варианта:</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+                                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                                    <div>
+                                        <span class="bg-slate-200 text-slate-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Вариант 1</span>
+                                        <h4 class="font-bold text-sm text-slate-800 mt-2 mb-1.5">Временное отключение</h4>
+                                        <p class="text-xs text-slate-600 leading-relaxed">
+                                            Просто временно выключайте тумблер <strong>«Использовать прокси-сервер»</strong> в системных настройках Windows (или в настройках используемого расширения браузера) на время визита на российские сайты. После завершения работы включите тумблер обратно для восстановления безопасного зарубежного веб-серфинга.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="bg-blue-50/50 p-5 rounded-xl border border-blue-100 shadow-sm flex flex-col justify-between">
+                                    <div>
+                                        <span class="bg-blue-100 text-blue-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Вариант 2</span>
+                                        <h4 class="font-bold text-sm text-blue-900 mt-2 mb-1.5">Настройка исключений (Рекомендуется)</h4>
+                                        <p class="text-xs text-blue-950/80 leading-relaxed">
+                                            Чтобы постоянно не включать и не выключать тумблер вручную, добавьте сайты в список исключений. В Windows в окне настройки прокси-сервера (в самом низу под полем ввода IP и Порта) найдите текстовое поле <strong>«Не использовать прокси-сервер для адресов...»</strong>. Впишите туда нужные адреса сайтов через точку с запятой, например: <code class="bg-white px-1.5 py-0.5 border border-blue-200 rounded text-blue-800 font-mono">*.gosuslugi.ru; *.sberbank.ru; yandex.ru</code>.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-6">
+                            <h3 class="text-lg font-bold mb-3 flex items-center gap-2"><span>🍎</span> Информация для пользователей Apple MacBook</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Если вы настраиваете прокси на MacBook, системные параметры сети устроены иначе: логин и пароль от прокси-сервера у вас запросят сразу в момент ввода IP-адреса и порта в настройках macOS. Вам не придется ждать открытия браузера для авторизации — вы вводите данные один раз сразу в настройках сети, и все приложения Mac сразу начинают корректно работать через прокси.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="lightbox" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-4xl hover:text-slate-300 transition focus:outline-none">&times;</button>
+        <img id="lightbox-img" src="" alt="Zoomed view" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl">
+    </div>
+
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition duration-300 pointer-events-none flex items-center gap-2">
+        <span class="text-emerald-400">✔️</span>
+        <span id="toast-text" class="text-sm font-medium">Текст скопирован!</span>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs space-y-2">
+            <p>© 2026 SpaceProxy Инструкция. Все материалы и скриншоты принадлежат их владельцам.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 text-slate-600 hover:bg-slate-100";
+            });
+            document.getElementById('btn-' + tabId).className = "tab-btn w-full text-left px-4 py-3 rounded-xl font-medium transition flex items-center gap-3 bg-blue-100 text-blue-700 shadow-sm";
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function copyPromo() {
+            const promoText = "RoRL5qeJYi9WwsCBgtN";
+            const tempInput = document.createElement("input");
+            tempInput.value = promoText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            showToast("Промокод на скидку скопирован!");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imgSrc;
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target !== document.getElementById('lightbox-img')) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
